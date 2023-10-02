@@ -4,10 +4,11 @@ public class Teatro {
 
     static Scanner entrada = new Scanner(System.in);
     static int l = 15, c = 15;
-    static int valorIngresso = 50;
+    final static double valorInicialIngresso = 50.0;
+    static double valorIngresso = valorInicialIngresso;
     static boolean[][] cadeiras = new boolean[l][c];
     static boolean[][] confirmado = new boolean[l][c];
-    static boolean estudante = false;
+    static int qtdEstudante = 0;
 
     private static void exibirMenuPrincipal() {
         System.out.println("Bem vindos ao Sistema de reservas do teatro do Lucas");
@@ -47,22 +48,16 @@ public class Teatro {
         int reservadas = 0;
         int confirmados = 0;
         int estudantes = 0;
-        float valorArrecadado = 0;
+        double valorArrecadado = 0;
 
         for (int i = 0; i < l; i++) {
             for (int j = 0; j < c; j++) {
-                if (!cadeiras[i][j]) {
-                    livres++;
-                } else if (cadeiras[i][j]) {
+                if (cadeiras[i][j] && !confirmado[i][j]) {
                     reservadas++;
-                }
-            }
-        }
-
-        for (int i = 0; i < l; i++) {
-            for (int j = 0; j < c; j++) {
-                if (cadeiras[i][j] && cadeiras[i][j] == true) {
-                    estudantes++;
+                } else if (cadeiras[i][j] && confirmado[i][j]) {
+                    confirmados++;
+                } else {
+                    livres++;
                 }
             }
         }
@@ -71,9 +66,9 @@ public class Teatro {
 
         System.out.println("Relatório de reservas");
         System.out.println("Quantidade de cadeiras livres: " + livres);
-        System.out.println("Quantidade de cadeiras reservados: " + reservadas);
-        System.out.println("Quantidade de cadeiras confirmados: " + confirmados);
-        System.out.println("Quantidade de ingressos de estudantes: " + estudantes);
+        System.out.println("Quantidade de cadeiras reservadas: " + reservadas);
+        System.out.println("Quantidade de cadeiras confirmadas: " + confirmados);
+        System.out.println("Quantidade de ingressos de estudantes: " + qtdEstudante);
         System.out.println("Valor total arrecadado: R$" + valorArrecadado);
     }
 
@@ -96,17 +91,15 @@ public class Teatro {
 
         cadeiras[linha][coluna] = true;
 
-        int valor = valorIngresso;
         if (resp.equals("s")) {
-            valor = valorIngresso / 2;
-            estudante = true;
+            valorIngresso = valorIngresso / 2;
         }else{
-            valor = valorIngresso;
-            estudante = false;
+            valorIngresso = valorIngresso;
         }
 
         System.out.println("Reserva realizada com sucesso.");
-        System.out.println("Valor da reserva: R$" + valor);
+        System.out.printf("Valor da reserva: R$ %.2f\n", valorIngresso);
+        
 
     }
 
@@ -127,16 +120,15 @@ public class Teatro {
         System.out.println("Você é estudante? (s/n)");
         resp = entrada.next();
 
+        if(resp.equals("s")){
+            qtdEstudante++;
+        }
+
         System.out.println("Informe o valor do pagamento:");
         valorPago = entrada.nextInt();
 
-        if(resp.equals("s")){
-            valor = valorIngresso / 2;
-        }else{
-            valor = valorIngresso;
-        }
 
-        if (valor != valorIngresso) {
+        if (valorIngresso != valorPago) {
             System.out.println("O valor do pagamento deve ser igual ao valor do ingresso.");
             return;
         }
@@ -144,6 +136,8 @@ public class Teatro {
         confirmado[linha][coluna] = true;
 
         System.out.println("Reserva confirmada com sucesso.");
+
+        valorIngresso = valorInicialIngresso;
     }
 
     private static void cancelarReserva() {
@@ -167,13 +161,17 @@ public class Teatro {
     public static void main(String[] args) {
         int op = -1;
 
-        while (op != 0) {
+        while (true) {
             exibirMenuPrincipal();
             op = entrada.nextInt();
 
+            if(op==0){
+                break;
+            }
+
             switch (op) {
                 case 1:
-                    while (true) {
+                    while (op!=0) {
                         System.out.println("1 - Modificar valor do ingresso");
                         System.out.println("2 - Visualizar mapa de cadeiras");
                         System.out.println("3 - Gerar relatório");
@@ -182,7 +180,6 @@ public class Teatro {
 
                         switch (op) {
                             case 1:
-                                // Modificar valor do ingresso
                                 System.out.println("Informe o novo valor do ingresso:");
                                 valorIngresso = entrada.nextInt();
                                 break;
@@ -205,7 +202,7 @@ public class Teatro {
 
                 case 2:
 
-                    while (true) {
+                    while (op!=0) {
                         System.out.println("1 - Visualizar mapa de cadeiras");
                         System.out.println("2 - Realizar reserva");
                         System.out.println("3 - Cancelar reserva");
