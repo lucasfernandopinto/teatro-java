@@ -9,6 +9,7 @@ public class Teatro {
     static boolean[][] cadeiras = new boolean[l][c];
     static boolean[][] confirmado = new boolean[l][c];
     static int qtdEstudante = 0;
+    static double valorArrecadado = 0;
 
     private static void exibirMenuPrincipal() {
         System.out.println("Bem vindos ao Sistema de reservas do teatro do Lucas");
@@ -36,7 +37,7 @@ public class Teatro {
                 } else if (cadeiras[i][j] && confirmado[i][j]) {
                     System.out.print("X ");
                 } else {
-                    System.out.print("_ ");
+                    System.out.print("- ");
                 }
             }
             System.out.println();
@@ -47,8 +48,6 @@ public class Teatro {
         int livres = 0;
         int reservadas = 0;
         int confirmados = 0;
-        int estudantes = 0;
-        double valorArrecadado = 0;
 
         for (int i = 0; i < l; i++) {
             for (int j = 0; j < c; j++) {
@@ -61,8 +60,6 @@ public class Teatro {
                 }
             }
         }
-
-        valorArrecadado = confirmados * valorIngresso;
 
         System.out.println("Relatório de reservas");
         System.out.println("Quantidade de cadeiras livres: " + livres);
@@ -120,9 +117,7 @@ public class Teatro {
         System.out.println("Você é estudante? (s/n)");
         resp = entrada.next();
 
-        if(resp.equals("s")){
-            qtdEstudante++;
-        }
+
 
         System.out.println("Informe o valor do pagamento:");
         valorPago = entrada.nextInt();
@@ -132,12 +127,15 @@ public class Teatro {
             System.out.println("O valor do pagamento deve ser igual ao valor do ingresso.");
             return;
         }
-
+        if(resp.equals("s")){
+            qtdEstudante++;
+        }
         confirmado[linha][coluna] = true;
 
         System.out.println("Reserva confirmada com sucesso.");
-
+        valorArrecadado += valorPago;
         valorIngresso = valorInicialIngresso;
+        
     }
 
     private static void cancelarReserva() {
