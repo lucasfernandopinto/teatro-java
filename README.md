@@ -8,7 +8,7 @@ lugares comprados (com pagamento já efetuado). Se um pedido de reserva não for
 considerar um teatro com M = 15 filas, numeradas de 0 à 14, cada fila com N = 15
 cadeiras, conforme ilustrado a seguir
 
-![image](https://github.com/lucaspinto-dev/contavirtual-java/blob/2b2e17db21ccd4bfcfa0759750ca6aa367f59df5/teatro.png)
+![image](https://github.com/lucaspinto-dev/Teatro-java/blob/6fef55d06a24a5cd40ab056b3d276b5ccdf8f257/teatro.png)
 
 Desenvolva um sistema para gerenciar as reservas de um espetáculo. O sistema deve
 possuir menus com acesso para uma área administrativa e área de cliente. Nelas:
